@@ -1,6 +1,7 @@
 
 import mysql.connector
 
+# Connection to db
 def getConnection():
     cnx = mysql.connector.connect(user='taras',
                               password='taras_smaliukh',
