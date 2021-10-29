@@ -5,8 +5,8 @@ import boto.s3.connection
 
 # Connection to db on rds
 def getConnectionRDS():
-    cnx = mysql.connector.connect(user='taras',
-                              password='taras_smaliukh',
+    cnx = mysql.connector.connect(user='<insert your DB user name>',
+                              password='insert your password to DB>',
                               host='dbnorthwind.cjgt1chgkycw.eu-central-1.rds.amazonaws.com',
                               database='northwind')
     return cnx
