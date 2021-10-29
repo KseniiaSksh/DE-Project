@@ -13,5 +13,5 @@ def getConnectionRDS():
 
 # Credentials to connect S3
 bucket_name = 'delabnortwind'
-access_key = 'AKIAZNBEQCNNE3EWRMMG'
-secret_key = 'IeCS07ahevdbcyEM10OGJRvcVNb0Uv3wSAI6zf/3'
+access_key = '<insert your access key>'
+secret_key = '<insert your secret key>'
