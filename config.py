@@ -23,4 +23,5 @@ client_S3 = boto3.client('s3',
 )
 
 session = Session(aws_access_key_id=access_key,
+
                   aws_secret_access_key=secret_key)
