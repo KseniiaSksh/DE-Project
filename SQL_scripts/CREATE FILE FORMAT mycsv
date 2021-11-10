@@ -1,0 +1,25 @@
+USE  NORTHWINDDB;
+
+CREATE FILE FORMAT mycsv
+                     
+     COMPRESSION = AUTO 
+     RECORD_DELIMITER = '<r>' 
+     FIELD_DELIMITER = '<f>'
+     FILE_EXTENSION = '<|>'
+     SKIP_HEADER = 1
+     SKIP_BLANK_LINES = TRUE
+     DATE_FORMAT = '<.>' 
+     TIME_FORMAT = '<.>' 
+     TIMESTAMP_FORMAT = '<.>' 
+     BINARY_FORMAT =  UTF8
+     ESCAPE = 'e' 
+     ESCAPE_UNENCLOSED_FIELD = 'u' 
+     TRIM_SPACE = TRUE
+   
+     NULL_IF = ( 'null' , 'null')
+     ERROR_ON_COLUMN_COUNT_MISMATCH = TRUE
+     REPLACE_INVALID_CHARACTERS = TRUE
+     VALIDATE_UTF8 = TRUE
+     EMPTY_FIELD_AS_NULL = TRUE
+     SKIP_BYTE_ORDER_MARK = TRUE
+     ENCODING = '<UTF-8>' 
