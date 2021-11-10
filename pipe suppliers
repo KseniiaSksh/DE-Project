@@ -1,0 +1,4 @@
+create pipe "NORTHWINDDB".DWH_SCHEMA.suppliers_pipe auto_ingest=true as
+copy into "NORTHWINDDB"."DWH_SCHEMA"."SUPPLIERS"
+from @"NORTHWINDDB".DWH_SCHEMA.DE_LAB_STAGE
+file_format = (type = 'CSV');
