@@ -135,8 +135,8 @@ select
 from
 	(
 		select
-			to_date('2015-01-01 00:00:01', 'YYYY-MM-DD HH24:MI:SS') as DD,
-			/*<<Modify date for preferred table start date*/
+			to_date('1990-01-01 00:00:01', 'YYYY-MM-DD HH24:MI:SS') as DD,
+			--start date
 			seq1() as Sl,
 			row_number() over (
 				order by
@@ -152,7 +152,7 @@ from
 				and date_part(mm, V_DATE) < 10 then date_part(year, V_DATE) || '0' || date_part(mm, V_DATE) || date_part(dd, V_DATE)
 				when date_part(dd, V_DATE) > 9
 				and date_part(mm, V_DATE) > 9 then date_part(year, V_DATE) || date_part(mm, V_DATE) || date_part(dd, V_DATE)
-			end as DATE_PKEY,
+			end as DATE_PKEY,--date converted to 8-digit number number
 			V_DATE as DATE_COLUMN,
 			dayname(dateadd(day, row_numbers, DD)) as DAY_NAME_1,
 			case
@@ -177,6 +177,7 @@ from
 				when monthname(dateadd(day, row_numbers, DD)) = 'Nov' then 'November'
 				when monthname(dateadd(day, row_numbers, DD)) = 'Dec' then 'December'
 			end || ' ' || to_varchar(dateadd(day, row_numbers, DD), ' dd, yyyy') as FULL_DATE_DESC,
+            --day of the week, month, date, year
 			dateadd(day, row_numbers, DD) as V_DATE_1,
 			dayofweek(V_DATE_1) + 1 as DAY_NUM_IN_WEEK,
 			Date_part(dd, V_DATE_1) as DAY_NUM_IN_MONTH,
@@ -204,7 +205,7 @@ from
 				and date_part(dd, date_trunc('week', V_DATE_1)) < 10 then date_part(yyyy, date_trunc('week', V_DATE_1)) || date_part(mm, date_trunc('week', V_DATE_1)) || '0' || date_part(dd, date_trunc('week', V_DATE_1))
 				when date_part(mm, date_trunc('week', V_DATE_1)) > 9
 				and date_part(dd, date_trunc('week', V_DATE_1)) > 9 then date_part(yyyy, date_trunc('week', V_DATE_1)) || date_part(mm, date_trunc('week', V_DATE_1)) || date_part(dd, date_trunc('week', V_DATE_1))
-			end as WEEK_BEGIN_DATE_NKEY,
+			end as WEEK_BEGIN_DATE_NKEY, --date of the first day of the week as number
 			date_trunc('week', V_DATE_1) as WEEK_BEGIN_DATE,
 			case
 				when date_part(mm, last_day(V_DATE_1, 'week')) < 10
@@ -215,7 +216,7 @@ from
 				and date_part(dd, last_day(V_DATE_1, 'week')) < 10 then date_part(yyyy, last_day(V_DATE_1, 'week')) || date_part(mm, last_day(V_DATE_1, 'week')) || '0' || date_part(dd, last_day(V_DATE_1, 'week'))
 				when date_part(mm, last_day(V_DATE_1, 'week')) > 9
 				and date_part(dd, last_day(V_DATE_1, 'week')) > 9 then date_part(yyyy, last_day(V_DATE_1, 'week')) || date_part(mm, last_day(V_DATE_1, 'week')) || date_part(dd, last_day(V_DATE_1, 'week'))
-			end as WEEK_END_DATE_NKEY,
+			end as WEEK_END_DATE_NKEY,--date of the last day of the week as number
 			last_day(V_DATE_1, 'week') as WEEK_END_DATE,
 			week(V_DATE_1) as WEEK_NUM_IN_YEAR,
 			case
@@ -237,16 +238,15 @@ from
 			case
 				when month(V_DATE_1) < 10 then year(V_DATE_1) || '-0' || month(V_DATE_1)
 				else year(V_DATE_1) || '-' || month(V_DATE_1)
-			end as YEARMONTH,
-			quarter(V_DATE_1) as CURRENT_QUARTER,
-			year(V_DATE_1) || '-0' || quarter(V_DATE_1) as YEARQUARTER,
+			end as YEARMONTH, -- month and year of that day without date
+			quarter(V_DATE_1) as CURRENT_QUARTER,--number of the quarter
+			year(V_DATE_1) || '-0' || quarter(V_DATE_1) as YEARQUARTER,--year and number of the quarter
 			year(V_DATE_1) as CURRENT_YEAR,
 			to_timestamp_ntz(V_DATE) as SQL_TIMESTAMP
 		from
-			table(generator(rowcount = > 8401))
-			/*<< Set to generate 20 years. Modify rowcount to increase or decrease size*/
+			table(generator(rowcount => 16802))
+		 -- Set to generate 40 years
 	) v;
-
 --ORDER DETAILS
 CREATE
 OR REPLACE TABLE OrderDetails(
