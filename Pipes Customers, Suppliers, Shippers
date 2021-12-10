@@ -1,0 +1,61 @@
+create or replace pipe "NORTHWINDDB".DWH_SCHEMA.customers_pipe auto_ingest=true as
+
+copy into "NORTHWINDDB".DWH_SCHEMA.Customers(
+CUSTOMERID,
+COMPANYNAME,
+CONTACTNAME,
+CONTACTTITLE,	
+ADDRESS,	
+CITY,	
+REGION,
+POSTALCODE,	
+COUNTRY,	
+RECORDSTARTDATE)	                                            
+
+from (select $1,$2,$3,$4,$5,$6,$7,$8,$9, $13
+
+FROM @"NORTHWINDDB".DWH_SCHEMA.S3STAGE)
+
+pattern='.*customers.*.csv'
+
+file_format = 'DE_LAB_CSV';
+
+
+create or replace pipe "NORTHWINDDB".DWH_SCHEMA.suppliers_pipe auto_ingest=true as
+
+copy into "NORTHWINDDB".DWH_SCHEMA.Suppliers(
+SUPPLIERID,
+COMPANYNAME,
+CONTACTNAME,
+CONTACTTITLE,	
+ADDRESS,	
+CITY,	
+REGION,
+POSTALCODE,	
+COUNTRY,	
+RECORDSTARTDATE)	                                            
+
+from (select $1,$2,$3,$4,$5,$6,$7,$8,$9, $13
+
+FROM @"NORTHWINDDB".DWH_SCHEMA.S3STAGE)
+
+pattern='.*suppliers.*.csv'
+
+file_format = 'DE_LAB_CSV';
+
+
+create or replace pipe "NORTHWINDDB".DWH_SCHEMA.shippers_pipe auto_ingest=true as
+
+copy into "NORTHWINDDB".DWH_SCHEMA.Shippers(
+SHIPPERID,
+COMPANYNAME,
+PHONE
+)	                                            
+
+from (select $1,$2,$3
+
+FROM @"NORTHWINDDB".DWH_SCHEMA.S3STAGE)
+
+pattern='.*shippers.*.csv'
+
+file_format = 'DE_LAB_CSV';
