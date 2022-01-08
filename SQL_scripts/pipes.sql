@@ -1,3 +1,16 @@
+CREATE STORAGE INTEGRATION integration_s3
+  TYPE = EXTERNAL_STAGE
+  STORAGE_PROVIDER = S3
+  ENABLED = TRUE
+  STORAGE_AWS_ROLE_ARN = 'arn:aws:iam::646469129050:role/SNOWFLAKE'
+  STORAGE_ALLOWED_LOCATIONS = ('s3://delabnortwind/Northwind_csv/');
+
+desc integration integration_s3;
+
+create stage s3stage
+url = 's3://delabnortwind/'
+storage_integration = INTEGRATION_S3;
+
 create or replace pipe CATEGORIES_PIPE auto_ingest=true as copy into "NORTHWINDDB".STAGE_SCHEMA.categories(
 CategoriesID,
 CategoryName,
