@@ -80,37 +80,34 @@ OR REPLACE TABLE Products(
 	RecordEndDate date DEFAULT NULL
 );
 
-create
-or replace table DIM_DATE (
-	DATE_PKEY number(9) PRIMARY KEY,
-	DATE date not null,
-	FULL_DATE_DESC varchar(64) not null,
-	DAY_NUM_IN_WEEK number(1) not null,
-	DAY_NUM_IN_MONTH number(2) not null,
-	DAY_NUM_IN_YEAR number(3) not null,
-	DAY_NAME varchar(10) not null,
-	DAY_ABBREV varchar(3) not null,
-	MONTH_END_IND varchar(64) not null,
-	WEEK_BEGIN_DATE_NKEY number(9) not null,
-	WEEK_BEGIN_DATE date not null,
-	WEEK_END_DATE_NKEY number(9) not null,
-	WEEK_END_DATE date not null,
-	WEEK_NUM_IN_YEAR number(9) not null,
-	MONTH_NAME varchar(10) not null,
-	MONTH_ABBREV varchar(3) not null,
-	MONTH_NUM_IN_YEAR number(2) not null,
-	YEARMONTH varchar(10) not null,
-	QUARTER number(1) not null,
-	YEARQUARTER varchar(10) not null,
-	YEAR number(5) not null,
-	SQL_TIMESTAMP timestamp_ntz
+create or replace TABLE DIM_DATE (
+	DATE DATE NOT NULL,
+	FULL_DATE_DESC VARCHAR(64) NOT NULL,
+	DAY_NUM_IN_WEEK NUMBER(1,0) NOT NULL,
+	DAY_NUM_IN_MONTH NUMBER(2,0) NOT NULL,
+	DAY_NUM_IN_YEAR NUMBER(3,0) NOT NULL,
+	DAY_NAME VARCHAR(10) NOT NULL,
+	DAY_ABBREV VARCHAR(3) NOT NULL,
+	MONTH_END_IND VARCHAR(64) NOT NULL,
+	WEEK_BEGIN_DATE_NKEY NUMBER(9,0) NOT NULL,
+	WEEK_BEGIN_DATE DATE NOT NULL,
+	WEEK_END_DATE_NKEY NUMBER(9,0) NOT NULL,
+	WEEK_END_DATE DATE NOT NULL,
+	WEEK_NUM_IN_YEAR NUMBER(9,0) NOT NULL,
+	MONTH_NAME VARCHAR(10) NOT NULL,
+	MONTH_ABBREV VARCHAR(3) NOT NULL,
+	MONTH_NUM_IN_YEAR NUMBER(2,0) NOT NULL,
+	YEARMONTH VARCHAR(10) NOT NULL,
+	QUARTER NUMBER(1,0) NOT NULL,
+	YEARQUARTER VARCHAR(10) NOT NULL,
+	YEAR NUMBER(5,0) NOT NULL,
+	SQL_TIMESTAMP TIMESTAMP_NTZ(9),
+	primary key (date)
 );
 
--- Populate data into DIM_DATE
 insert into
 	DIM_DATE
 select
-	DATE_PKEY,
 	DATE_COLUMN,
 	FULL_DATE_DESC,
 	DAY_NUM_IN_WEEK,
@@ -143,16 +140,6 @@ from
 					Sl
 			) as row_numbers,
 			dateadd(day, row_numbers, DD) as V_DATE,
-			case
-				when date_part(dd, V_DATE) < 10
-				and date_part(mm, V_DATE) > 9 then date_part(year, V_DATE) || date_part(mm, V_DATE) || '0' || date_part(dd, V_DATE)
-				when date_part(dd, V_DATE) < 10
-				and date_part(mm, V_DATE) < 10 then date_part(year, V_DATE) || '0' || date_part(mm, V_DATE) || '0' || date_part(dd, V_DATE)
-				when date_part(dd, V_DATE) > 9
-				and date_part(mm, V_DATE) < 10 then date_part(year, V_DATE) || '0' || date_part(mm, V_DATE) || date_part(dd, V_DATE)
-				when date_part(dd, V_DATE) > 9
-				and date_part(mm, V_DATE) > 9 then date_part(year, V_DATE) || date_part(mm, V_DATE) || date_part(dd, V_DATE)
-			end as DATE_PKEY,--date converted to 8-digit number number
 			V_DATE as DATE_COLUMN,
 			dayname(dateadd(day, row_numbers, DD)) as DAY_NAME_1,
 			case
@@ -244,8 +231,8 @@ from
 			year(V_DATE_1) as CURRENT_YEAR,
 			to_timestamp_ntz(V_DATE) as SQL_TIMESTAMP
 		from
-			table(generator(rowcount => 16802))
-		 -- Set to generate 40 years
+			table(generator(rowcount => 25203))
+		 -- Set to generate 60 years
 	) v;
 --ORDER DETAILS
 CREATE
